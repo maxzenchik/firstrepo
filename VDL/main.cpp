@@ -74,11 +74,22 @@ int main(int argc, char *argv[])
         {
             end_time += 60;
         }
-        Qcout<<"done \r\n";
-        Qcout<<QString::number(end_time - start_time,10);
-
-
-
+        int _time = end_time - start_time;
+        int packs = 0;
+        for(int i = 0; i < Out.size(); i++)
+        {
+            packs += Out[i].packsDetected;
+        }
+        double packsPerSec = (double)packs/(double)_time;
+        Qcout<<"\r\n time:  ";
+        Qcout<<QString::number(_time,10);
+        Qcout<<" secs ";
+        Qcout<<"\r\n packs:  ";
+        Qcout<<QString::number(packs,10);
+        Qcout<<"\r\n packs/sec:  ";
+        Qcout<<QString::number(packsPerSec);
+        int ab;
+        int wtf;
     }
     return a.exec();
 }
