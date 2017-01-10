@@ -163,7 +163,7 @@ QBitArray VDLTWO::DecodeHeader(QBitArray bits)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -217,7 +217,7 @@ int VDLTWO::GetTransmissionLength(QBitArray bits)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -258,7 +258,7 @@ quint64 VDLTWO::GetTime(QBitArray databits)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -276,7 +276,7 @@ QBitArray VDLTWO::GetScrambledBits(QBitArray databits)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -417,7 +417,7 @@ std::vector<unsigned char> VDLTWO::Interleave(std::vector<unsigned char> data_by
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -515,7 +515,7 @@ std::vector<std::vector <unsigned char> > VDLTWO::GetBlocks(std::vector<unsigned
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -546,7 +546,7 @@ std::vector<unsigned char> VDLTWO::MergeBlocks(std::vector<std::vector<unsigned 
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -565,7 +565,7 @@ QBitArray VDLTWO::FromBytes(std::vector<unsigned char> data_bytes)
         return rtv;
     } catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -591,7 +591,7 @@ QBitArray VDLTWO::FromBytesRMB(std::vector<unsigned char> data_bytes)
         return rtv;
     } catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -625,7 +625,7 @@ QBitArray VDLTWO::BitStuffingBack(QBitArray stuffed_data)
         return Unstuffed_data;
     } catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -668,7 +668,7 @@ QVector<QBitArray> VDLTWO::GetDataFrames(QBitArray data)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -736,7 +736,7 @@ int VDLTWO::GetSourceAdress(std::vector<unsigned char> data)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -791,7 +791,7 @@ int VDLTWO::GetDestAdress(std::vector<unsigned char> data)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -816,7 +816,7 @@ std::vector<std::vector<unsigned char> > VDLTWO::RSDecodeBlocks(std::vector<std:
         return blocks;
     } catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 //###############################################################################################################
@@ -854,6 +854,6 @@ bool VDLTWO::IsCorrectFCS(std::vector<unsigned char> block)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }

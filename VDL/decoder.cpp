@@ -201,6 +201,6 @@ Output Decoder::Decode(QVector<QBitArray> data_vector)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }

@@ -195,7 +195,7 @@ int VDLTHREE::FromBitsToInt(QBitArray bits)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 int weight(int vector)
@@ -232,7 +232,7 @@ QBitArray VDLTHREE::GoleyEncode(QBitArray data)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 
@@ -370,7 +370,7 @@ QBitArray VDLTHREE::GoleyDecode(QBitArray encoded_data)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 
@@ -415,7 +415,7 @@ bool VDLTHREE::IsCorrectFCS(std::vector<unsigned char> block)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 unsigned int VDLTHREE::GetFCS(std::vector<unsigned char> block)
@@ -436,7 +436,7 @@ unsigned int VDLTHREE::GetFCS(std::vector<unsigned char> block)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 
 }
@@ -459,7 +459,7 @@ std::vector<unsigned char> VDLTHREE::RSDecodeBlocks(std::vector<unsigned char> d
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 

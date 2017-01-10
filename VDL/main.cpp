@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 

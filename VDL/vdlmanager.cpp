@@ -66,7 +66,7 @@ void VDLManager::ProcessData(QByteArray signal, bool spectreInverse)
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 QVector<Output> VDLManager::ProcessDataFile(QByteArray signal, bool spectreInverse, bool runtimeOut)
@@ -126,7 +126,7 @@ QVector<Output> VDLManager::ProcessDataFile(QByteArray signal, bool spectreInver
     }
     catch(QException e)
     {
-        stdout>>e;
+        stdout<<e;
     }
 }
 
