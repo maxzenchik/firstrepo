@@ -2,7 +2,7 @@
 #define BITOPERATIONS_H
 #include <QBitArray>
 #include <QString>
-
+#include <QException>
 class BitOperations
 {
 public:

@@ -17,7 +17,8 @@ VDLManager::~VDLManager()
 
 void VDLManager::ProcessData(QByteArray signal, bool spectreInverse)
 {
-
+    try
+    {
     QDataStream ds(signal);
     ///порядок байт`
     ///LittleEndian - первый байт младший
@@ -62,10 +63,16 @@ void VDLManager::ProcessData(QByteArray signal, bool spectreInverse)
 
     emit resultReady(m_Output);
     }
+    }
+    catch(QException e)
+    {
+        stdout>>e;
+    }
 }
 QVector<Output> VDLManager::ProcessDataFile(QByteArray signal, bool spectreInverse, bool runtimeOut)
 {
-
+    try
+    {
     QDataStream ds(signal);
     ///порядок байт`
     ///LittleEndian - первый байт младший
@@ -114,7 +121,13 @@ QVector<Output> VDLManager::ProcessDataFile(QByteArray signal, bool spectreInver
         }
         m_Output.packsDetected += data_vector.size();
     }
+
     return Resoult;
+    }
+    catch(QException e)
+    {
+        stdout>>e;
+    }
 }
 
 void VDLManager::handleResult(Output out)

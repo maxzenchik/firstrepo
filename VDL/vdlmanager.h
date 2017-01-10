@@ -6,6 +6,7 @@
 #include <vdltwo.h>
 #include <decoder.h>
 #include <demod.h>
+
 class VDLManager : public QObject
 {
     Q_OBJECT

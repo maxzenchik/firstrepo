@@ -112,18 +112,13 @@ std::vector<unsigned char> BitOperations::BitsToBytes(QBitArray dataBits,bool in
     {
         dataBits.resize(dataBits.size()-b);
     }
-    //проходим по 8 бит
     for(int i = 0; i<dataBits.size()-1;i+=8)
     {
-        //записываем в буффер 8 очередняр
         for(int j =0; j<8;j++)
         {
             buffer[j] = dataBits[i+j];
         }
-        //делаем из 8 бит 1 байт и закидываем в вектор данных
         dataBytes.insert(dataBytes.end(),BitsToByte(buffer,invert));
-        //чистим буффер
-        //buffer.clear();
     }
 
     return dataBytes;

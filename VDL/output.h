@@ -2,7 +2,7 @@
 #define OUTPUT_H
 #include <QFile>
 #include <QTextStream>
-///
+#include <QException>
 /// \brief The Output class
 ///класс для хранения и вывода обработанной информации VDL2 и VDL3.
 class Output
