@@ -88,8 +88,6 @@ int main(int argc, char *argv[])
         Qcout<<QString::number(packs,10);
         Qcout<<"\r\n packs/sec:  ";
         Qcout<<QString::number(packsPerSec);
-        int ab;
-        int wtf;
     }
     return a.exec();
 }
