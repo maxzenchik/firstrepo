@@ -22,7 +22,7 @@ void Output::OutConsoleVDL2()
     }
     catch(QException e)
     {
-        stdout<<e;
+
     }
 }
 
@@ -62,7 +62,7 @@ void Output::OutFileVDL2(QString outFileName)
     }
     catch(QException e)
     {
-        stdout<<e;
+
     }
 
 }
@@ -80,6 +80,6 @@ void Output::OutFileVDL3(QString outFileName)
     }
     catch(QException e)
     {
-        stdout<<e;
+
     }
 }

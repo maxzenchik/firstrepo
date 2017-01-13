@@ -126,52 +126,48 @@ QBitArray VDLTWO::DecodeHeader(QBitArray bits)
     bool syndrom[5];                //синдром полученный в результате декодирования (без ошибок будет 0 0 0 0 0)
     bool tmp;
     bool tmp_arr[25];
-    try
-    {
-        for(int j = 0; j<5; j++)        //проход по столбцам проверочной матрицы
-        {
-            tmp = 0;
-            for(int i = 0; i < 25; i++) //проход по строкам
-            {
-                tmp_arr[i] = bits[i]&correcting_matrix[j][i];       //побитовое "И" исходной последовательности и строки матрицы
 
-            }
-            for(int i = 0; i<25; i++)
-            {
-                tmp = tmp ^ tmp_arr[i];                             //XOR полученных бит в результате побитового "И"
-            }
-            syndrom[j] = tmp;
+    for(int j = 0; j<5; j++)        //проход по столбцам проверочной матрицы
+    {
+        tmp = 0;
+        for(int i = 0; i < 25; i++) //проход по строкам
+        {
+            tmp_arr[i] = bits[i]&correcting_matrix[j][i];       //побитовое "И" исходной последовательности и строки матрицы
 
         }
-        bool fail;                                          //индикатор ошибки
-        for(int i =0; i < 20;i++)                           //проход по каждому синдрому
+        for(int i = 0; i<25; i++)
         {
-            fail = true;                                    //индикатор ошибки устанавливается. предположение что ошибка есть
-            for(int j = 0; j < 5; j++)
-            {
-                if(syndrom[j]!=sindroms[i][j])
-                {
-                    fail = false;                               //если один из элементов синдрома не совпадает то ошибки нет в i-ом бите
-                }                                           //индикатор сбрасывается
-            }
-            if(fail)
-            {                                                //если индикатор не сбросился - ощибка в i-м бите
-                bits[i] = bits[i]^1;                         //XOR с единицей исправляет ее
-            }
+            tmp = tmp ^ tmp_arr[i];                             //XOR полученных бит в результате побитового "И"
         }
-        return bits;
+        syndrom[j] = tmp;
+
     }
-    catch(QException e)
+    bool fail;                                          //индикатор ошибки
+    for(int i =0; i < 20;i++)                           //проход по каждому синдрому
     {
-        stdout<<e;
+        fail = true;                                    //индикатор ошибки устанавливается. предположение что ошибка есть
+        for(int j = 0; j < 5; j++)
+        {
+            if(syndrom[j]!=sindroms[i][j])
+            {
+                fail = false;                               //если один из элементов синдрома не совпадает то ошибки нет в i-ом бите
+            }                                           //индикатор сбрасывается
+        }
+        if(fail)
+        {                                                //если индикатор не сбросился - ощибка в i-м бите
+            bits[i] = bits[i]^1;                         //XOR с единицей исправляет ее
+        }
     }
+    return bits;
+
+
 }
 //###############################################################################################################
 int VDLTWO::GetTransmissionLength(QBitArray bits)
 {
     //записать 25 бит заголовка FEC начиная с 49-го бита
     //декодировать заголовок
-    try
+
     {
         QBitArray Tr_length(17);
         //записать с 4-го по 20-й бит (первые 3 бита зарезервированны 000)
@@ -215,9 +211,9 @@ int VDLTWO::GetTransmissionLength(QBitArray bits)
 
         return tr_ln + RS*8;
     }
-    catch(QException e)
+
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
@@ -245,7 +241,7 @@ QBitArray VDLTWO::GetRSFEC(QBitArray bits)
 //###############################################################################################################
 quint64 VDLTWO::GetTime(QBitArray databits)
 {
-    try
+
     {
         quint64 rtv = 0;
         for(int i = 0; i <40; i++)
@@ -256,15 +252,15 @@ quint64 VDLTWO::GetTime(QBitArray databits)
         }
         return rtv;
     }
-    catch(QException e)
+
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
 QBitArray VDLTWO::GetScrambledBits(QBitArray databits)
 {
-    try
+
     {
         QBitArray scrambled_bits(databits.size()-48);
 
@@ -274,15 +270,15 @@ QBitArray VDLTWO::GetScrambledBits(QBitArray databits)
         }
         return scrambled_bits;
     }
-    catch(QException e)
+
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
 QBitArray VDLTWO::Scramble(QBitArray bits)
 {
-    try
+
     {
         bool scram_bit;                                     //бит, который XORится с входным битом
         int shift_reg = 26969;                              //изначальное состояние регистра сдвига
@@ -317,7 +313,7 @@ QBitArray VDLTWO::Scramble(QBitArray bits)
 //###############################################################################################################
 std::vector<unsigned char> VDLTWO::Interleave(std::vector<unsigned char> data_bytes)
 {
-    try
+
     {
         int tr_len = data_bytes.size()*8;
         unsigned char block_count = data_bytes.size()/255 +1;
@@ -415,15 +411,15 @@ std::vector<unsigned char> VDLTWO::Interleave(std::vector<unsigned char> data_by
 
         return rtv;
     }
-    catch(QException e)
+
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
 std::vector<std::vector <unsigned char> > VDLTWO::GetBlocks(std::vector<unsigned char> data_bytes)
 {
-    try
+
     {
         int block_count = 0;
         std::vector<std::vector<unsigned char>> rtv;
@@ -513,15 +509,15 @@ std::vector<std::vector <unsigned char> > VDLTWO::GetBlocks(std::vector<unsigned
 
         return rtv;
     }
-    catch(QException e)
+
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
 std::vector<unsigned char> VDLTWO::MergeBlocks(std::vector<std::vector<unsigned char> > blocks)
 {
-    try
+
     {
         std::vector<unsigned char> rtv;
         for (unsigned int i = 0; i < blocks.size(); i++)
@@ -544,15 +540,15 @@ std::vector<unsigned char> VDLTWO::MergeBlocks(std::vector<std::vector<unsigned 
 
         return rtv;
     }
-    catch(QException e)
+
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
 QBitArray VDLTWO::FromBytes(std::vector<unsigned char> data_bytes)
 {
-    try
+
     {
         QBitArray rtv(data_bytes.size()*8);
         for(uint i = 0; i < data_bytes.size(); i++)
@@ -563,15 +559,15 @@ QBitArray VDLTWO::FromBytes(std::vector<unsigned char> data_bytes)
             }
         }
         return rtv;
-    } catch(QException e)
+    }
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
 QBitArray VDLTWO::FromBytesRMB(std::vector<unsigned char> data_bytes)
 {
-    try
+
     {
         QBitArray rtv(data_bytes.size()*8);
         QBitArray buffer(8);
@@ -589,15 +585,15 @@ QBitArray VDLTWO::FromBytesRMB(std::vector<unsigned char> data_bytes)
 
         }
         return rtv;
-    } catch(QException e)
+    }
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
 QBitArray VDLTWO::BitStuffingBack(QBitArray stuffed_data)
 {
-    try
+
     {
         short sequense_of_ones = 0;
         short stuffed_bits = 0;
@@ -623,15 +619,15 @@ QBitArray VDLTWO::BitStuffingBack(QBitArray stuffed_data)
         }
         Unstuffed_data.resize(Unstuffed_data.size()-stuffed_bits);
         return Unstuffed_data;
-    } catch(QException e)
+    }
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
 QVector<QBitArray> VDLTWO::GetDataFrames(QBitArray data)
 {
-    try
+
     {
         QVector<QBitArray> rtv;
         QVector<bool> buffer;
@@ -666,15 +662,15 @@ QVector<QBitArray> VDLTWO::GetDataFrames(QBitArray data)
 
         return rtv;
     }
-    catch(QException e)
+
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
 int VDLTWO::GetSourceAdress(std::vector<unsigned char> data)
 {
-    try
+
     {
         QString dst_adress;
         std::vector<unsigned char> buffer;
@@ -734,15 +730,15 @@ int VDLTWO::GetSourceAdress(std::vector<unsigned char> data)
     {dst_adress.append("Response frame");}*/
         return A;
     }
-    catch(QException e)
+
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
 int VDLTWO::GetDestAdress(std::vector<unsigned char> data)
 {
-    try
+
     {
         QString dst_adress;
         std::vector<unsigned char> buffer;
@@ -789,15 +785,15 @@ int VDLTWO::GetDestAdress(std::vector<unsigned char> data)
 
         return A;
     }
-    catch(QException e)
+
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
 std::vector<std::vector<unsigned char> > VDLTWO::RSDecodeBlocks(std::vector<std::vector<unsigned char> > blocks)
 {
-    try
+
     {
         std::vector<int> correct;
         ezpwd::reed_solomon<unsigned char,8,6,120,1,ezpwd::gfpoly<8,391>,int, int> rs;
@@ -814,15 +810,15 @@ std::vector<std::vector<unsigned char> > VDLTWO::RSDecodeBlocks(std::vector<std:
             erasures.clear();
         }
         return blocks;
-    } catch(QException e)
+    }
     {
-        stdout<<e;
+
     }
 }
 //###############################################################################################################
 bool VDLTWO::IsCorrectFCS(std::vector<unsigned char> block)
 {
-    try
+
     {
         if(block.size()>=2)
         {
@@ -852,8 +848,8 @@ bool VDLTWO::IsCorrectFCS(std::vector<unsigned char> block)
         else
             return false;
     }
-    catch(QException e)
+
     {
-        stdout<<e;
+
     }
 }

@@ -16,8 +16,7 @@ int main(int argc, char *argv[])
 {
 
     QCoreApplication a(argc, argv);
-    try
-    {
+
         static const QString IN_FILE_FLAG = "-z";
         static const QString OUT_FILE_FLAG = "-v";
         static const QString HELP_FLAG = "-h";
@@ -92,11 +91,8 @@ int main(int argc, char *argv[])
         }
 
         return a.exec();
-    }
-    catch(QException e)
-    {
-        stdout<<e;
-    }
+
+
 }
 
 

@@ -29,12 +29,15 @@ std::complex<int> Demod::GetCorrFunc(std::complex<int> UniqueWord[])
     complex <int> RegistrCorr[L_uniqueWord];//регистр кореллятора
     for (int i = 0; i < L_uniqueWord; i++)
     {
-        RegistrCorr[i].real(((UniqueWord[(L_uniqueWord-1)-i]*M[i*sampl_inSimbol+L_Z]).real()) >> 4);
-        RegistrCorr[i].imag(((UniqueWord[(L_uniqueWord-1)-i]*M[i*sampl_inSimbol+L_Z]).imag()) >> 4);
-        sumK =   RegistrCorr[i];
+        RegistrCorr[i]= UniqueWord[(L_uniqueWord-1)-i] * M[i*sampl_inSimbol+L_Z];
+        int real =  RegistrCorr[i].real() >> 4;
+        RegistrCorr[i].real(real);
+        int imag =  RegistrCorr[i].imag() >> 4;
+        RegistrCorr[i].imag(imag);
+
+        sumK +=   RegistrCorr[i];
     }
     return sumK;
-
 }
 QVector<QBitArray> Demod::Difdem(qint16 signalI[],  qint16 signalQ[])
 {
@@ -85,7 +88,7 @@ QVector<QBitArray> Demod::Difdem(qint16 signalI[],  qint16 signalQ[])
 
     //для уникального слова S vdl-2
 
-    complex <int> RegistrCorr[L_uniqueWord];//регистр кореллятора
+
 
     complex <int> sumK_2;//значение сумматора кореллятора
     double sIQ2 = 0; //значение функции корелляции VDL-2
@@ -100,24 +103,21 @@ QVector<QBitArray> Demod::Difdem(qint16 signalI[],  qint16 signalQ[])
     static double sIQ3_1_ = 0;
     static double sIQ3_1__ = 0;//значение функции корелляции двумя отсчетами ранее
 
-    //для уникального слова S1* vdl-3 M-Dowmlink
-    complex <int> RegistrCorrS1c[L_uniqueWord];//регистр кореллятора
+
 
     complex <int> sumK_S1c;//значение сумматора кореллятора S1*
     double sIQ3_1c = 0;//значение функции корелляции VDL-3 по синхропоследовательности S1*
     static double sIQ3_1c_ = 0;//предыдущее  значение
     static double sIQ3_1c__ = 0;//значение функции корелляции  двумя отсчетами ранее
 
-    //для уникального слова S2 vdl-3 V/D
-    complex <int> RegistrCorrS2[L_uniqueWord];//регистр кореллятора
+
 
     complex <int> sumK_S2;
     double sIQ3_2 = 0;//значение функции корелляции VDL-3 по синхропоследовательности S2
     static double sIQ3_2_ = 0;//предыдущее значение функции корелляции
     static double sIQ3_2__ = 0;//значение функции корелляции  двумя отсчетами ранее
 
-    //для уникального слова S2* vdl-3 Uplink
-    complex <int> RegistrCorrS2c[L_uniqueWord];//регистр кореллятора
+
 
     complex <int> sumK_S2c;
     double sIQ3_2c = 0;//значение функции корелляции VDL-3 по синхропоследовательности S2*
@@ -156,89 +156,33 @@ QVector<QBitArray> Demod::Difdem(qint16 signalI[],  qint16 signalQ[])
 
         //Кореллятор VDL-2
         sumK_2 = GetCorrFunc(UniqueWordVDL2);
-
-        sIQ2__ = sIQ2_; //чем отличаются эти 2 переменные? SIQ2__ и SIQ2_ ? см в инициализации
+        sIQ2__ = sIQ2_;
         sIQ2_ = sIQ2;
-        sIQ2  = ((pow((sumK_2.real() >> 16),2))+(pow((sumK_2.imag() >> 16),2))) >> 1;//значение корелляционной ф VDL-2
+        sIQ2  = ((int)(pow((sumK_2.real() >> 16),2))+(int)(pow((sumK_2.imag() >> 16),2))) >> 1;//значение корелляционной ф VDL-2
 
         //Кореллятор VDL-3 стандартный пакет
-        sumK_S1  = GetCorrFunc();
-        for ( int k = 0;k<L_uniqueWord;k++) //19 это все те же 19 что и выше? или просто совпало что значаения одинаковые ?
-        {
-            RegistrCorrS1[k] = UniqueWordVDL3_S1[(L_uniqueWord-1)-k]*M[k*sampl_inSimbol+L_Z];//18 и 120 те же ? если да то надо завести константы
-            int R_S1real =  RegistrCorrS1[k].real() >> 4;
-            RegistrCorrS1[k].real(R_S1real);
-            int R_S1imag =   RegistrCorrS1[k].imag() >> 4;
-            RegistrCorrS1[k].imag(R_S1imag);
-
-            sumK_S1 += RegistrCorrS1[k];
-
-        }
+        sumK_S1  = GetCorrFunc(UniqueWordVDL3_S1);
         sIQ3_1__ = sIQ3_1_;
         sIQ3_1_ = sIQ3_1;
-        sIQ3_1  = ((pow((sumK_S1.real() >> 16),2))+(pow((sumK_S1.imag() >> 16),2))) >> 1;
-
+        sIQ3_1  = ((int)(pow((sumK_S1.real() >> 16),2))+(int)(pow((sumK_S1.imag() >> 16),2))) >> 1;
 
         //Кореллятор VDL-3 входящий сетев запрос
-        sumK_S1c  = 0;
-        for ( int k = 0;k<L_uniqueWord;k++)
-        {
-            RegistrCorrS1c[k] = UniqueWordVDL3_S1c[(L_uniqueWord-1)-k]*M[k*sampl_inSimbol+L_Z];//
-            int R_S1creal =  RegistrCorrS1c[k].real() >> 4;
-            RegistrCorrS1c[k].real(R_S1creal);
-            int R_S1cimag =  RegistrCorrS1c[k].imag() >> 4;
-            RegistrCorrS1c[k].imag(R_S1cimag) ;
-
-            sumK_S1c +=   RegistrCorrS1c[k];
-        }
-
-        int I3_1c = (pow((sumK_S1c.real() >> 16),2));
-        int Q3_1c = (pow((sumK_S1c.imag() >> 16),2));
+        sumK_S1c  = GetCorrFunc(UniqueWordVDL3_S1c);
         sIQ3_1c__ = sIQ3_1c_;
         sIQ3_1c_ = sIQ3_1c;
-        sIQ3_1c  = (I3_1c+Q3_1c) >> 1;
+        sIQ3_1c  = ((int)(pow((sumK_S1c.real() >> 16),2))+(int)(pow((sumK_S1c.imag() >> 16),2))) >> 1;
 
-        //////////////////////////////////////////////////
         //Кореллятор VDL-3 звук/данные
-        sumK_S2  = 0;
-        for ( int k = 0;k<L_uniqueWord;k++)
-        {
-            RegistrCorrS2[k] = UniqueWordVDL3_S2[(L_uniqueWord-1)-k]*M[k*sampl_inSimbol+L_Z];//
-            int R_S2real =  RegistrCorrS2[k].real() >> 4;
-            RegistrCorrS2[k].real(R_S2real);
-            int R_S2imag =  RegistrCorrS2[k].imag() >> 4;
-            RegistrCorrS2[k].imag(R_S2imag);
-
-            sumK_S2 +=   RegistrCorrS2[k];
-
-        }
-
-        int I3_2 = (pow((sumK_S2.real() >> 16),2));
-        int Q3_2 = (pow((sumK_S2.imag() >> 16),2));
+        sumK_S2  = GetCorrFunc(UniqueWordVDL3_S2);
         sIQ3_2__ = sIQ3_2_;
         sIQ3_2_ = sIQ3_2;
-        sIQ3_2  = (I3_2+Q3_2) >> 1;
-
+        sIQ3_2  = ((int)(pow((sumK_S2.real() >> 16),2))+(int)(pow((sumK_S2.imag() >> 16),2))) >> 1;
 
         //Кореллятор VDL-3 исходящий сетев запрос
-        sumK_S2c  = 0;
-        for ( int k = 0;k<L_uniqueWord;k++)
-        {
-            RegistrCorrS2c[k] = UniqueWordVDL3_S2c[(L_uniqueWord-1)-k]*M[k*sampl_inSimbol+L_Z];//
-
-            int R_S2creal = RegistrCorrS2c[k].real() >> 4;
-            RegistrCorrS2c[k].real(R_S2creal);
-            int R_S2cimag = RegistrCorrS2c[k].imag() >> 4;
-            RegistrCorrS2c[k].imag(R_S2cimag);
-
-            sumK_S2c +=   RegistrCorrS2c[k];
-
-        }
-        int I3_2c = (pow((sumK_S2c.real() >> 16),2));
-        int Q3_2c = (pow((sumK_S2c.imag() >> 16),2));
+        sumK_S2c  = GetCorrFunc(UniqueWordVDL3_S2c);
         sIQ3_2c__ = sIQ3_2c_;
         sIQ3_2c_ = sIQ3_2c;
-        sIQ3_2c  = (I3_2c+Q3_2c) >> 1;
+        sIQ3_2c  = ((int)(pow((sumK_S2c.real() >> 16),2))+(int)(pow((sumK_S2c.imag() >> 16),2))) >> 1;
 
 
         korf_ = korf;
