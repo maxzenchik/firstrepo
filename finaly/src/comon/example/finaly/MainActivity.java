@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 //import java.sql.Connection;
 //import java.sql.DriverManager;
 //import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import java.sql.Driver;
 //import java.sql.Statement;
 import android.app.Activity;
@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.database.Cursor;
+import android.database.SQLException;
 public class MainActivity extends Activity {
 
 	static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
@@ -62,11 +64,6 @@ public class MainActivity extends Activity {
 	public void FindCountry(View view) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		EditText editText = (EditText) findViewById(R.id.edit_message);
 		try {
-			
-			String url = "jdbc:mysql://localhost:3306/world";
-			Connection con = DriverManager.getConnection(url, "root", "dave2302387");
-			Connection conbo = DriverManager.getConnection("jdbc:mysql://localhost/world?" +
-                    "user=root&password=dave2302387");
 			
 		} catch (SQLException e) {
 			editText.setText(e.toString());
