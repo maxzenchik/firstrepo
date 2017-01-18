@@ -30,6 +30,7 @@ private:
     static const quint64 VDL3_S2_2 = 5;
     unsigned char GetVersion(QBitArray bits);
 public:
+
     Output Decode(QVector<QBitArray> inData);
 
 };

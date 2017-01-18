@@ -178,7 +178,7 @@ std::complex<int>* VDLTHREE::InitTrainingSeqResponse()
     return S;
 }
 
-int VDLTHREE::FromBitsToInt(QBitArray bits)
+inline int VDLTHREE::FromBitsToInt(QBitArray bits)
 {
     int rtv;
     rtv = 0;

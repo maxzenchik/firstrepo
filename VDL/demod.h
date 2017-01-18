@@ -18,6 +18,21 @@
 using namespace std;
 class Demod:public QObject
 { Q_OBJECT
+
+    //уникальное слово VDL-2
+    complex <int> *UniqueWordVDL2;
+
+    //уникальное слово VDL-3, стандартная последовательность
+    complex <int> *UniqueWordVDL3_S1;//уникальное слово VDL-3, стандартная последовательность
+
+    //training sequence VDLmod3 идентификатор входящего сетевого запроса
+    complex <int> *UniqueWordVDL3_S1c;
+
+    //training sequence VDLmod3 M  Uplink burst
+    complex <int> *UniqueWordVDL3_S2;
+
+    //training sequence VDLmod3 идентификатор ответа на запрос
+    complex <int> *UniqueWordVDL3_S2c;
 //функции для декодирования заголовка пакета VDL-2. Вызываются в указанном порядке
 
 int sampl_inSimbol = 8; //колличество входных отсчетов на символ
@@ -71,7 +86,7 @@ qint64 Energe[Ntap_e];
 
 public:
  void init();
-
+ Demod();
 std::complex<int> GetCorrFunc(std::complex<int> UniqueWordVDL2[]);
 //Функция Демодулятор.Принимает массивы  signalI и signalQ. Возвращает демодулированные VDL пакеты.
 //Один элемент QVector соответствует одному  VDL пакету

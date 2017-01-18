@@ -17,56 +17,49 @@ VDLManager::~VDLManager()
 
 void VDLManager::ProcessData(QByteArray signal, bool spectreInverse)
 {
-    try
+    QDataStream ds(signal);
+    ///порядок байт`
+    ///LittleEndian - первый байт младший
+    ///BigEndian - первый байт старший
+    ds.setByteOrder(QDataStream::LittleEndian);
+
+
+    ///считывание до конца файла или FIFO
+    while(!ds.atEnd())
     {
-        QDataStream ds(signal);
-        ///порядок байт`
-        ///LittleEndian - первый байт младший
-        ///BigEndian - первый байт старший
-        ds.setByteOrder(QDataStream::LittleEndian);
-
-
-        ///считывание до конца файла или FIFO
-        while(!ds.atEnd())
-        {
-            //СЧИТЫВАНИЕ ДАННЫХ
-            if(!spectreInverse)
-                for(int i = 0; i<FRAME_SIZE; i++)
-                {
-                    ds>>signalI[i];//реальная часть сигнала
-                    ds>>signalQ[i];//мнимая часть сигнала//ПОМЕНЯТЬ ОБРАТНО!!!!
-                }
-            else
-                for(int i = 0; i<FRAME_SIZE; i++)
-                {
-                    ds>>signalQ[i];//реальная часть сигнала
-                    ds>>signalI[i];//мнимая часть сигнала//ПОМЕНЯТЬ ОБРАТНО!!!!
-                }
-
-            QVector<QBitArray> data_vector;
-            //ДЕМОДУЛЯЦИЯ
-            data_vector = m_Demodulator->Difdem(signalI,signalQ);
-            //ДЕКОДИРОВАНИЕ
-            Output m_Output = m_Decoder->Decode(data_vector);
-            //ВЫВОД
-            //m_Output.OutFileVDL2("ggwp.txt");
-            //сигнал о завершении
-            QString out;
-            for(uint i = 0; i < m_Output.messages.size(); i++ )
+        //СЧИТЫВАНИЕ ДАННЫХ
+        if(!spectreInverse)
+            for(int i = 0; i<FRAME_SIZE; i++)
             {
-                out.append(m_Output.dstAdress.at(i));
-                out.append(m_Output.srcAdress.at(i));
-                out.append(m_Output.messages.at(i));
+                ds>>signalI[i];//реальная часть сигнала
+                ds>>signalQ[i];//мнимая часть сигнала//ПОМЕНЯТЬ ОБРАТНО!!!!
             }
-            m_Output.packsDetected += data_vector.size();
+        else
+            for(int i = 0; i<FRAME_SIZE; i++)
+            {
+                ds>>signalQ[i];//реальная часть сигнала
+                ds>>signalI[i];//мнимая часть сигнала//ПОМЕНЯТЬ ОБРАТНО!!!!
+            }
 
-
-            emit resultReady(m_Output);
+        QVector<QBitArray> data_vector;
+        //ДЕМОДУЛЯЦИЯ
+        data_vector = m_Demodulator->Difdem(signalI,signalQ);
+        //ДЕКОДИРОВАНИЕ
+        Output m_Output = m_Decoder->Decode(data_vector);
+        //ВЫВОД
+        //m_Output.OutFileVDL2("ggwp.txt");
+        //сигнал о завершении
+        QString out;
+        for(uint i = 0; i < m_Output.messages.size(); i++ )
+        {
+            out.append(m_Output.dstAdress.at(i));
+            out.append(m_Output.srcAdress.at(i));
+            out.append(m_Output.messages.at(i));
         }
-    }
-    catch(QException e)
-    {
+        m_Output.packsDetected += data_vector.size();
 
+
+        emit resultReady(m_Output);
     }
 }
 QVector<Output> VDLManager::ProcessDataFile(QByteArray signal, bool spectreInverse, bool runtimeOut)
@@ -105,7 +98,7 @@ QVector<Output> VDLManager::ProcessDataFile(QByteArray signal, bool spectreInver
         //ДЕКОДИРОВАНИЕ
         m_Output = m_Decoder->Decode(data_vector);
         //ВЫВОД
-        Resoult.push_back(m_Output);
+
         if(runtimeOut)
         {
             m_Output.OutConsoleVDL2();
@@ -119,6 +112,7 @@ QVector<Output> VDLManager::ProcessDataFile(QByteArray signal, bool spectreInver
             out.append(m_Output.messages.at(i));
         }
         m_Output.packsDetected += data_vector.size();
+        Resoult.push_back(m_Output);
     }
 
     return Resoult;

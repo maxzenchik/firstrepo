@@ -2,6 +2,24 @@
 
 using namespace std;
 
+Demod::Demod()
+{
+    //уникальное слово VDL-2
+    UniqueWordVDL2 = VDLTWO::InitUniqWord();
+
+    //уникальное слово VDL-3, стандартная последовательность
+    UniqueWordVDL3_S1 = VDLTHREE::InitTrainingSeqMDownlink();//уникальное слово VDL-3, стандартная последовательность
+
+    //training sequence VDLmod3 идентификатор входящего сетевого запроса
+    UniqueWordVDL3_S1c = VDLTHREE::InitTrainingSeqRequest();
+
+    //training sequence VDLmod3 M  Uplink burst
+    UniqueWordVDL3_S2 = VDLTHREE::InitTrainingSeqResponse();
+
+    //training sequence VDLmod3 идентификатор ответа на запрос
+    UniqueWordVDL3_S2c = VDLTHREE::InitTrainingSeqResponse();
+}
+
 void Demod::init()
 {
     this->simbol_sizeOfData = 0;
@@ -23,7 +41,7 @@ void Demod::init()
     paket = noise;
     system_config = VDL_2;
 }
-std::complex<int> Demod::GetCorrFunc(std::complex<int> UniqueWord[])
+inline std::complex<int> Demod::GetCorrFunc(std::complex<int> UniqueWord[])
 {
     std::complex<int> sumK = 0;
     complex <int> RegistrCorr[L_uniqueWord];//регистр кореллятора
@@ -127,22 +145,9 @@ QVector<QBitArray> Demod::Difdem(qint16 signalI[],  qint16 signalQ[])
     int korf = 0; //результирующее значение кореллятора
     static int korf_ = 0;//предыдущее результирующее значение кореллятора
 
-    //уникальное слово VDL-2
-    complex <int> *UniqueWordVDL2 = VDLTWO::InitUniqWord();
-
-    //уникальное слово VDL-3, стандартная последовательность
-    complex <int> *UniqueWordVDL3_S1 = VDLTHREE::InitTrainingSeqMDownlink();//уникальное слово VDL-3, стандартная последовательность
-
-    //training sequence VDLmod3 идентификатор входящего сетевого запроса
-    complex <int> *UniqueWordVDL3_S1c = VDLTHREE::InitTrainingSeqRequest();
-
-    //training sequence VDLmod3 M  Uplink burst
-    complex <int> *UniqueWordVDL3_S2 = VDLTHREE::InitTrainingSeqResponse();
-
-    //training sequence VDLmod3 идентификатор ответа на запрос
-    complex <int> *UniqueWordVDL3_S2c = VDLTHREE::InitTrainingSeqResponse();
 
     //основной цикл обработки входных отсчетов//
+
     for(int i = 0;i<sampl_inKadr;i++)
     {
         //перемещаем отсчеты по входному регистру
