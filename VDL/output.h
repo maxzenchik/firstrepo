@@ -10,6 +10,7 @@ class Output
 
 public:
     Output();
+
     QByteArray outBytes;
     int bytesWriten;
     int packsDetected;
@@ -24,6 +25,13 @@ public:
     void OutConsoleVDL2();
     void OutFileVDL2(QString outFileName);
     void OutFileVDL3(QString outFileName);
+private:
+    QString format_src_str = "Source adress: ";
+    QString format_dst_str = "Destination adress: ";
+    QString format_msg_str = "Data (characters): \r\n";
+    QString format_time_str = "Time: ";
+    QString format_type_str = "Type: ";
+    QString format_div_str = "\r\n";
 };
 
 #endif // OUTPUT_H

@@ -59,7 +59,6 @@ int main(int argc, char *argv[])
         {
             QFile data(inFileName);
             data.open(QIODevice::ReadOnly);
-            //QByteArray signal = data.readAll();
             VDLManager m_VDL;
             QTime t = QTime::currentTime();
             QTextStream Qcout(stdout);
@@ -88,6 +87,12 @@ int main(int argc, char *argv[])
             Qcout<<QString::number(packs,10);
             Qcout<<"\r\n packs/sec:  ";
             Qcout<<QString::number(packsPerSec);
+            foreach (Output mOut, Out) {
+                mOut.OutFileVDL2(outFileName);
+            }
+            /*foreach (Output mOut, Out) {
+                mOut.OutFileVDL3(outFileName);
+            }*/
         }
 
         return a.exec();

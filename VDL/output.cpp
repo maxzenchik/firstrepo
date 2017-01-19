@@ -33,31 +33,33 @@ void Output::OutFileVDL2(QString outFileName)
         if(outFileName != NULL)
         {
             QFile outFile(outFileName);
-            outFile.open(QIODevice::WriteOnly);
-            for(int i = messages.size()-1; i >= 0; i--)
+            outFile.open(QIODevice::Append);
+            for(int i = 0; i <messages.size(); i++)
             {
-                outBytes.insert(bytesWriten,messages[i]);//сообщение
+                //адрес source
+                outFile.write(format_src_str.toUtf8());
+                outFile.write(QString::number(srcAdress.at(i),16).toUtf8().toUpper());
+                outFile.write(format_div_str.toUtf8());
+                //адрес dst
+                outFile.write(format_dst_str.toUtf8());
+                outFile.write(QString::number(dstAdress.at(i),16).toUtf8().toUpper());
+                outFile.write(format_div_str.toUtf8());
+                //время
+                /*outFile.write(format_time_str.toUtf8());
+                outFile.write(QString::number(times.at(i),16).toUtf8());
+                outFile.write(format_div_str.toUtf8());*/
+                //тип
+                /*outFile.write(format_type_str.toUtf8());
+                outFile.write(QString::number(types.at(i),16).toUtf8());
+                outFile.write(format_div_str.toUtf8());*/
+                //сообщение
+                outFile.write(format_msg_str.toUtf8());
+                outFile.write(messages.at(i).toUtf8());
+                outFile.write(format_div_str.toUtf8());
+                outFile.write(format_div_str.toUtf8());
 
-                outBytes.insert(bytesWriten,srcAdress[i]);//адрес отправителя
-                outBytes.insert(bytesWriten,srcAdress[i]>>8);//адрес отправителя
-                outBytes.insert(bytesWriten,srcAdress[i]>>16);//адрес отправителя
-
-                outBytes.insert(bytesWriten,dstAdress[i]);//адрес назначения
-                outBytes.insert(bytesWriten,dstAdress[i]>>8);//адрес назначения
-                outBytes.insert(bytesWriten,dstAdress[i]>>16);//адрес назначения
-
-                outBytes.insert(bytesWriten,lengths[0]);//длинна
-                outBytes.insert(bytesWriten,lengths[0]>>8);//длинна
-
-                outBytes.insert(bytesWriten,types[0]);//тип
-
-                outBytes.insert(bytesWriten,times[0]);//время
-                outBytes.insert(bytesWriten,times[0]>>8);//время
-                outBytes.insert(bytesWriten,times[0]>>16);//время
-                outBytes.insert(bytesWriten,times[0]>>24);//время
-                outBytes.insert(bytesWriten,times[0]>>32);//время
             }
-            outFile.write(outBytes);
+
         }
     }
     catch(QException e)

@@ -87,7 +87,7 @@ qint64 Energe[Ntap_e];
 public:
  void init();
  Demod();
-std::complex<int> GetCorrFunc(std::complex<int> UniqueWordVDL2[]);
+inline std::complex<int> GetCorrFunc(std::complex<int> UniqueWordVDL2[]);
 //Функция Демодулятор.Принимает массивы  signalI и signalQ. Возвращает демодулированные VDL пакеты.
 //Один элемент QVector соответствует одному  VDL пакету
 QVector <QBitArray> Difdem(qint16 signalI[], qint16 signalQ[]);
