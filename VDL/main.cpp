@@ -59,14 +59,14 @@ int main(int argc, char *argv[])
         {
             QFile data(inFileName);
             data.open(QIODevice::ReadOnly);
-            QByteArray signal = data.readAll();
+            //QByteArray signal = data.readAll();
             VDLManager m_VDL;
             QTime t = QTime::currentTime();
             QTextStream Qcout(stdout);
             Qcout << "Processing Data...";
 
             int start_time = t.currentTime().second();
-            QVector<Output> Out = m_VDL.ProcessDataFile(signal,false, true);
+            QVector<Output> Out = m_VDL.ProcessDataFile(&data,false, true);
             int end_time = t.currentTime().second();
             //emit m_VDL->ProcessData(signal,false);
             data.close();//закрытие файла (канала)*/

@@ -23,7 +23,8 @@ void VDLManager::ProcessData(QByteArray signal, bool spectreInverse)
     ///BigEndian - первый байт старший
     ds.setByteOrder(QDataStream::LittleEndian);
 
-
+    qint16 *signalI = new qint16[FRAME_SIZE];
+    qint16 *signalQ = new qint16[FRAME_SIZE];
     ///считывание до конца файла или FIFO
     while(!ds.atEnd())
     {
@@ -57,12 +58,13 @@ void VDLManager::ProcessData(QByteArray signal, bool spectreInverse)
             out.append(m_Output.messages.at(i));
         }
         m_Output.packsDetected += data_vector.size();
-
+        delete [] signalI;
+        delete [] signalQ;
 
         emit resultReady(m_Output);
     }
 }
-QVector<Output> VDLManager::ProcessDataFile(QByteArray signal, bool spectreInverse, bool runtimeOut)
+QVector<Output> VDLManager::ProcessDataFile(QFile *signal, bool spectreInverse, bool runtimeOut)
 {
 
     QDataStream ds(signal);
@@ -72,7 +74,8 @@ QVector<Output> VDLManager::ProcessDataFile(QByteArray signal, bool spectreInver
     ds.setByteOrder(QDataStream::LittleEndian);
     QVector<Output> Resoult;
     Output m_Output;
-
+    qint16 *signalI = new qint16[FRAME_SIZE];
+    qint16 *signalQ = new qint16[FRAME_SIZE];
     ///считывание до конца файла или FIFO
     while(!ds.atEnd())
     {
@@ -114,7 +117,8 @@ QVector<Output> VDLManager::ProcessDataFile(QByteArray signal, bool spectreInver
         m_Output.packsDetected += data_vector.size();
         Resoult.push_back(m_Output);
     }
-
+    delete [] signalI;
+    delete [] signalQ;
     return Resoult;
 
 }

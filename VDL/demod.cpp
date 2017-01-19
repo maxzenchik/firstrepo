@@ -57,7 +57,7 @@ inline std::complex<int> Demod::GetCorrFunc(std::complex<int> UniqueWord[])
     }
     return sumK;
 }
-QVector<QBitArray> Demod::Difdem(qint16 signalI[],  qint16 signalQ[])
+QVector<QBitArray> Demod::Difdem(qint16 *signalI,  qint16 *signalQ)
 {
 
 
@@ -676,7 +676,7 @@ QVector<QBitArray> Demod::Difdem(qint16 signalI[],  qint16 signalQ[])
     {
         /* набираем первые  40 елементов битового массива data. время регистрации пакета*/
         data.resize(L_preambulaTime);
-        data.fill(false);
+       // data.fill(false);
 
         qint64 block_codbit;
 

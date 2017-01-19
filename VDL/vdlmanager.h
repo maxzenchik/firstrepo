@@ -17,8 +17,8 @@ public:
     Demod *m_Demodulator;
     Decoder *m_Decoder;
 
-    qint16 signalI[FRAME_SIZE];
-    qint16 signalQ[FRAME_SIZE];
+    //qint16* signalI;
+    //qint16* signalQ;
     ///
     /// \brief ProcessDataFile демодуляция декодирование и вывод сообщений VDL (через возвращаемое значение)
     /// \param signal массив выборок
@@ -26,7 +26,7 @@ public:
     /// \param realTimeOut true = вывод в консоль сообщений сразу после обнаружения и декодирования. false = вывод нужно осуществлять после завершения функции
     /// \return - вектор, содержащий все найденые сообщения
     ///
-    QVector<Output> ProcessDataFile(QByteArray signal, bool spectreInverse, bool runtimeOut);
+    QVector<Output> ProcessDataFile(QFile *signal, bool spectreInverse, bool runtimeOut);
 signals:
     void resultReady(Output);
 public slots:
