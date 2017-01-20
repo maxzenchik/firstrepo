@@ -87,9 +87,9 @@ int main(int argc, char *argv[])
             Qcout<<QString::number(packs,10);
             Qcout<<"\r\n packs/sec:  ";
             Qcout<<QString::number(packsPerSec);
-            foreach (Output mOut, Out) {
+            /*foreach (Output mOut, Out) {
                 mOut.OutFileVDL2(outFileName);
-            }
+            }*/
             /*foreach (Output mOut, Out) {
                 mOut.OutFileVDL3(outFileName);
             }*/

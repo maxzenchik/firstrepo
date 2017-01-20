@@ -1,51 +1,60 @@
 #ifndef DEMOD_H
 #define DEMOD_H
-
-#include <QtCore/QCoreApplication>
-#include <bitset>
+#include "qmath.h"
 #include "vdlthree.h"
-#include "vdltwo.h"
+//#include "lpf.h"
+#include <iostream>
+#include <fstream>
+#include <cstdlib>// нужна что бы взять модуль от комплексного
+#include <math.h>
+#include <complex>
+#include <bitset>
+#include <array>
+#include <vector>
+#include <QtCore/QCoreApplication>
+#include <QBitArray>
+#include <QByteArray>
+#include <QDataStream>
+#include <QTextStream>
+#include <QDebug>
+#include <QString>
+#include <QFile>
 
-#define Ntap_M 270 //длина  регистра для входного сигнала
-#define Ntap_T 256 //длина  регистра для блока выделения тактовой частоты
-#define Ntap_e 5
+#define N_tapM 512
 
-#define L_uniqueWord 19 //длина уникального слова
-#define L_preambulaTime 40 //Длина преамбулы времени
-#define L_preambulaVDL 8   //Длина преамбулы режима VDL
-#define L_preambula 48
-#define L_Z 120  //длина линии задержки входного сигнала
 using namespace std;
-class Demod:public QObject
-{ Q_OBJECT
+class Demod : public QObject
+{
+Q_OBJECT
 
-    //уникальное слово VDL-2
-    complex <int> *UniqueWordVDL2;
+    //функции для декодирования заголовка пакета VDL-2. Вызываются в указанном порядке//
+static QBitArray Scramble(QBitArray bits);//1й
+static QBitArray DecodeHeader(QBitArray bits);//2й
+static int GetTransmissionLength(QBitArray bits);//3й
 
-    //уникальное слово VDL-3, стандартная последовательность
-    complex <int> *UniqueWordVDL3_S1;//уникальное слово VDL-3, стандартная последовательность
+int FromBitsToInt(QBitArray bits);
+complex<qint32> plfFir (qint32 MI[], qint32 MQ[], qint16 p_index, qint8 nFIR);//полифазный фильтр
 
-    //training sequence VDLmod3 идентификатор входящего сетевого запроса
-    complex <int> *UniqueWordVDL3_S1c;
-
-    //training sequence VDLmod3 M  Uplink burst
-    complex <int> *UniqueWordVDL3_S2;
-
-    //training sequence VDLmod3 идентификатор ответа на запрос
-    complex <int> *UniqueWordVDL3_S2c;
-//функции для декодирования заголовка пакета VDL-2. Вызываются в указанном порядке
-
-int sampl_inSimbol = 8; //колличество входных отсчетов на символ
-bool packetWriteEnable;//для идентификации VDL пакета
+bool flag;//для идентификации VDL пакета
 int simbol_sizeOfData;//размер пакета  в символах
-int maxThreshold;//текущий порог для обнаружитенля
-int kmax;// номер отсчета максимума кореляционной функции
-int energeS;//енергетика сигнала VDL-2
+int kmax;//номер отсчета,при котором был обнаружен пакет
+int energeS;//величина енергетики сигнала
+int maxThreshold; //уровень пика  корелляционной функции
+
 QVector <qint8> simbol;//набор демодулированных символов
 
+int schetchik_ZpolifF; // счетчик задержки ролифазного фильтра
+bool en;// используется для включения  полифазного фильтра
+int nFIR;//номер КИХ фильтра полифазного фильтра
+qint16 n_Z;//поправка для выбора номера выборки в символе
+qint16 schetchik_i;//счетчик переходов на соседнюю выборку после окончания наболров КИХ полифазного фильтра
+complex <int> out_polifaznik_;//предыдущее значение выхода полифазного фильтра
 
 
-//перечисление возможных вариантов  уникального слова
+qint16 Z_index;//текущий номер элемента  входного кольуевого буфера
+qint16 m_index;// номер элемента  входного кольцевого буфера соответствующий полифазному фильтру
+bool opt_1;//выбор номера входной выборки  совпадает по времени  с оптимальным отсчетом
+   //индикатор уникального слова//
 enum burst {noise,//нет пакета
             mod2,//пакет режима VDL-Mod2
             standart,//пакет M-DownLink
@@ -55,7 +64,7 @@ enum burst {noise,//нет пакета
            };
 burst paket;
 
-//перечисление возможных конфигураций систем
+    //перечисление возможных конфигураций систем//
 enum System_configurations {
             VDL_2,//режим VDL-2
             Non_3T,//конфигурация не-3Т
@@ -63,7 +72,7 @@ enum System_configurations {
             Dedicated_voice_circuit_wshared_data_circuit_ABC,//выделенный канал(слот) звука для каждой группы полъзователей,поддерж 3 гр,слоты: A B C и общий канал данных, слот D
             Dedicated_voice_circuit_wdedicated_data_circuit,//выделенные каналы(слот) звука для кажд группы пользователей, слоты: A B и выделенные каналы данных для кажд группы пользов, слоты: C D, поддерж 2 гр
             Demand_assigned_voice_and_data,//предоставление по требованию звука и данных, по всем слотам, поддерж 1 гр пользоват. 3-T конфигурация
-            //длинная серия
+
             Dedicated_voice_circuit_ABC,//выделенный канал(слот) звука для каждой группы полъзователей A B C, поддерж 3гр
             Dedicated_voice_circuit_with_ABCstation_diversity,//выделенный канал звука по трем различным станциям(слотам), слоты:  A B C, поддерж 1гр
             Dedicated_voice_circuit_with_ACstation_diversity,//выделенный канал звука по двум различным станциям(слотам), слоты:  A C, поддерж 1гр
@@ -72,25 +81,26 @@ enum System_configurations {
                           };
  System_configurations system_config;
 
- //перечисление возможных направлений пакета
+ //перечисление возможных направлений пакета//
 enum link {undefined,
            up_link,
            down_link
           };
 link  direct;
 
+int MI[N_tapM];
+int MQ[N_tapM];
 
-complex <int> M[Ntap_M];//массив кореллятора
-
-qint64 Energe[Ntap_e];
 
 public:
- void init();
- Demod();
-inline std::complex<int> GetCorrFunc(std::complex<int> UniqueWordVDL2[]);
-//Функция Демодулятор.Принимает массивы  signalI и signalQ. Возвращает демодулированные VDL пакеты.
-//Один элемент QVector соответствует одному  VDL пакету
-QVector <QBitArray> Difdem(qint16 signalI[], qint16 signalQ[]);
+
+  void init();//данную функцию необходимо вызвать при запуске программы
+
+        //Функция Демодулятор.Принимает массивы  signalI и signalQ, размерами 349760.
+        //Возвращает демодулированные VDL пакеты в битах.
+        //Один элемент QVector соответствует одному  VDL пакету
+  QVector <QBitArray> Difdem(qint16 signalI[], qint16 signalQ[]);
+
 
 
 };
