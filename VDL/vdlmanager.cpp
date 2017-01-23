@@ -8,6 +8,14 @@ VDLManager::VDLManager()
 
 }
 
+int VDLManager::getSamplingFrequency() {
+    return  samplingFrequency;
+}
+
+void VDLManager::setSamplingFrequency(int samplingFrequency) {
+    samplingFrequency = samplingFrequency;
+}
+
 VDLManager::~VDLManager()
 {
     delete m_Decoder;
@@ -44,7 +52,7 @@ void VDLManager::ProcessData(QByteArray signal, bool spectreInverse)
 
         QVector<QBitArray> data_vector;
         //ДЕМОДУЛЯЦИЯ
-        data_vector = m_Demodulator->Difdem(signalI,signalQ);
+        data_vector = m_Demodulator->Difdem(signalI,signalQ, samplingFrequency);
         //ДЕКОДИРОВАНИЕ
         Output m_Output = m_Decoder->Decode(data_vector);
         //ВЫВОД
@@ -97,7 +105,7 @@ QVector<Output> VDLManager::ProcessDataFile(QFile *signal, bool spectreInverse, 
         //ДЕМОДУЛЯЦИЯ
 
 
-        data_vector = m_Demodulator->Difdem(signalI,signalQ);
+        data_vector = m_Demodulator->Difdem(signalI,signalQ, samplingFrequency);
         //ДЕКОДИРОВАНИЕ
         m_Output = m_Decoder->Decode(data_vector);
         //ВЫВОД

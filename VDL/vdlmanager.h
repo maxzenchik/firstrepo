@@ -10,8 +10,14 @@
 class VDLManager : public QObject
 {
     Q_OBJECT
-public:
+private:
     static const int FRAME_SIZE = 349760;
+    int samplingFrequency = 84000;
+public:
+
+    int getSamplingFrequency();
+    void setSamplingFrequency(int samplingFrequency);
+
     VDLManager();
     ~VDLManager();
     Demod *m_Demodulator;

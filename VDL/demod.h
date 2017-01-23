@@ -99,7 +99,7 @@ public:
         //Функция Демодулятор.Принимает массивы  signalI и signalQ, размерами 349760.
         //Возвращает демодулированные VDL пакеты в битах.
         //Один элемент QVector соответствует одному  VDL пакету
-  QVector <QBitArray> Difdem(qint16 signalI[], qint16 signalQ[]);
+  QVector <QBitArray> Difdem(qint16 signalI[], qint16 signalQ[], double ResiverTakt);
 
 
 
