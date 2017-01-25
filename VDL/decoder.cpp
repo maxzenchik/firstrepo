@@ -123,7 +123,7 @@ Output Decoder::Decode(QVector<QBitArray> data_vector)
 
             //end of case VDL 3
         }
-        case VDL3_S2:
+        case VDL_3_VD:
         {
             if(bits.size()<96)
             {

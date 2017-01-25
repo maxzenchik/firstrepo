@@ -90,9 +90,9 @@ int main(int argc, char *argv[])
             /*foreach (Output mOut, Out) {
                 mOut.OutFileVDL2(outFileName);
             }*/
-            /*foreach (Output mOut, Out) {
+            foreach (Output mOut, Out) {
                 mOut.OutFileVDL3(outFileName);
-            }*/
+            }
         }
 
         return a.exec();

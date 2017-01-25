@@ -28,6 +28,8 @@ private:
     static const quint64 VDL3_S1_2 = 3;
     static const quint64 VDL3_S2 = 4;
     static const quint64 VDL3_S2_2 = 5;
+    static const quint64 VDL_3_VD = 17;
+    static const quint64 VDL_3_M_dl_ResReqMes = 10;
     unsigned char GetVersion(QBitArray bits);
 public:
 

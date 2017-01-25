@@ -2,9 +2,6 @@ package comon.example.finaly;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-//import java.sql.Connection;
-//import java.sql.DriverManager;
-//import java.sql.ResultSet;
 
 import java.sql.Driver;
 //import java.sql.Statement;
@@ -17,10 +14,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 public class MainActivity extends Activity {
 
 	static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-
+	DatabaseWorker worker;
+	SQLiteDatabase db;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,7 +63,10 @@ public class MainActivity extends Activity {
 	public void FindCountry(View view) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		EditText editText = (EditText) findViewById(R.id.edit_message);
 		try {
+			worker = new DatabaseWorker(this);
+			db = worker.getReadableDatabase();
 			
+		
 		} catch (SQLException e) {
 			editText.setText(e.toString());
 			
@@ -73,4 +75,5 @@ public class MainActivity extends Activity {
 		// editText.setText("success");
 
 	}
+
 }

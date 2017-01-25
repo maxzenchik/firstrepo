@@ -70,18 +70,46 @@ void Output::OutFileVDL2(QString outFileName)
 }
 void Output::OutFileVDL3(QString outFileName)
 {
-    try
+
+    if(outFileName != NULL)
     {
-        if(outFileName != NULL)
+        QFile outFile(outFileName);
+        outFile.open(QIODevice::Append);
+        for(int i = 0; i <messages.size(); i++)
         {
-            QFile outFile(outFileName);
-            outFile.open(QIODevice::WriteOnly);
+            //адрес source
+            outFile.write(format_src_str.toUtf8());
+            outFile.write(QString::number(srcAdress.at(i),16).toUtf8().toUpper());
+            outFile.write(format_div_str.toUtf8());
+            //адрес dst
+            outFile.write(format_dst_str.toUtf8());
+            outFile.write(QString::number(dstAdress.at(i),16).toUtf8().toUpper());
+            outFile.write(format_div_str.toUtf8());
+            //время
+            /*outFile.write(format_time_str.toUtf8());
+            outFile.write(QString::number(times.at(i),16).toUtf8());
+            outFile.write(format_div_str.toUtf8());*/
+            //тип
+            /*outFile.write(format_type_str.toUtf8());
+            outFile.write(QString::number(types.at(i),16).toUtf8());
+            outFile.write(format_div_str.toUtf8());*/
+            //сообщение
+            outFile.write(format_msg_str.toUtf8());
+            outFile.write(messages.at(i).toUtf8());
+            outFile.write(format_div_str.toUtf8());
+            outFile.write(format_div_str.toUtf8());
 
-            outFile.write(outBytes);
         }
-    }
-    catch(QException e)
-    {
 
+    }
+
+    if(outFileName != NULL)
+    {
+        QFile outFile(outFileName);
+        outFile.open(QIODevice::WriteOnly);
+
+        outFile.write(outBytes);
     }
 }
+
+

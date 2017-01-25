@@ -113,6 +113,7 @@ QVector<Output> VDLManager::ProcessDataFile(QFile *signal, bool spectreInverse, 
         if(runtimeOut)
         {
             m_Output.OutConsoleVDL2();
+
         }
         //сигнал о завершении
         QString out;
