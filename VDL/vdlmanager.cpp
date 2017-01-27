@@ -50,11 +50,11 @@ void VDLManager::ProcessData(QByteArray signal, bool spectreInverse)
                 ds>>signalI[i];//мнимая часть сигнала//ПОМЕНЯТЬ ОБРАТНО!!!!
             }
 
-        QVector<QBitArray> data_vector;
+        QVector<QBitArray> dataBits;
         //ДЕМОДУЛЯЦИЯ
-        data_vector = m_Demodulator->Difdem(signalI,signalQ, samplingFrequency);
+        dataBits = m_Demodulator->Difdem(signalI,signalQ, samplingFrequency);
         //ДЕКОДИРОВАНИЕ
-        Output m_Output = m_Decoder->Decode(data_vector);
+        Output m_Output = m_Decoder->Decode(dataBits);
         //ВЫВОД
         //m_Output.OutFileVDL2("ggwp.txt");
         //сигнал о завершении
@@ -65,7 +65,7 @@ void VDLManager::ProcessData(QByteArray signal, bool spectreInverse)
             out.append(m_Output.srcAdress.at(i));
             out.append(m_Output.messages.at(i));
         }
-        m_Output.packsDetected += data_vector.size();
+        m_Output.packsDetected += dataBits.size();
         delete [] signalI;
         delete [] signalQ;
 
