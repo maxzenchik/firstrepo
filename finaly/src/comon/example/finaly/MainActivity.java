@@ -1,29 +1,55 @@
+
 package comon.example.finaly;
+//для парсинга с сайта##############################################
+import org.jsoup.select.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.io.IOException;
+import java.util.ArrayList;
 
-import java.sql.Driver;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+//##################################################################
 //import java.sql.Statement;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.database.Cursor;
+import android.widget.ListView;
+
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 public class MainActivity extends Activity {
 
+	
+    public Elements title;
+    
+    public ArrayList<String> titleList = new ArrayList<String>();
+   
+    private ArrayAdapter<String> adapter;
+    
+    private ListView lv;
 	static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 	DatabaseWorker worker;
 	SQLiteDatabase db;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
+        // определение данных
+        lv = (ListView) findViewById(R.id.listView1);
+        // запрос к нашему отдельному поток на выборку данных
+        new NewThread().execute();
+        // Добавляем данные для ListView
+        adapter = new ArrayAdapter<String>(this, R.layout.list_item, R.id.product_name, titleList);
+
+		
+		
 	}
 
 	@Override
@@ -57,7 +83,7 @@ public class MainActivity extends Activity {
 
 	public void copyMessage(View view) {
 		EditText editText = (EditText) findViewById(R.id.edit_message);
-		editText.setText("ggwp lol");
+		editText.setText("g1232134124");
 	}
 
 	public void FindCountry(View view) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
@@ -72,8 +98,45 @@ public class MainActivity extends Activity {
 			
 		}
 		
-		// editText.setText("success");
+		
 
 	}
+public class NewThread extends AsyncTask<String, Void, String>
+{
 
+	@Override
+	protected String doInBackground(String... params) {
+		// TODO Auto-generated method stub
+		Document doc;
+		try {
+            // определяем откуда будем воровать данные
+            //doc = Jsoup.connect("https://www.whoscored.com/LiveScores").userAgent("Mozilla/5.0 Gecko/20100101 Firefox/21.0").get();
+            doc = Jsoup.connect("http://livesport.ws/live-football").get();
+            //doc = Jsoup.connect("https://eu.battle.net/forums/ru/overwatch/19369455").get();
+            // задаем с какого места, я выбрал заголовке статей
+            title = doc.select("div.commands");
+            
+            
+            
+            //title = doc.getElementById("countdown");
+            // чистим наш аррей лист для того что бы заполнить
+            titleList.clear();
+            int x = title.size();
+            // и в цикле захватываем все данные какие есть на странице
+            for (Element titles : title) {
+                    // записываем в аррей лист
+                    titleList.add(titles.text());
+            }
+    } catch (IOException e) {
+            e.printStackTrace();
+    }
+		return null;
+	}
+    @Override
+    protected void onPostExecute(String result) {
+
+            // после запроса обновляем листвью
+            lv.setAdapter(adapter);
+    }
+}
 }
