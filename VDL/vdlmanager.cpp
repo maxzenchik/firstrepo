@@ -74,7 +74,6 @@ void VDLManager::ProcessData(QByteArray signal, bool spectreInverse)
 }
 QVector<Output> VDLManager::ProcessDataFile(QFile *signal, bool spectreInverse, bool runtimeOut)
 {
-
     QDataStream ds(signal);
     ///порядок байт`
     ///LittleEndian - первый байт младший
