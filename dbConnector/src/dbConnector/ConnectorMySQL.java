@@ -5,18 +5,27 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import dbConnector.City;
 public class ConnectorMySQL {
-	public static void main(String [] args) throws SQLException
+    private	static String url = "jdbc:mysql://localhost/world?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static String user = "root";
+    private static String pass = "dave2302387";
+
+
+	public static void ConnectDB()
 	{
-		String url = "jdbc:mysql://localhost/world?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-		String user = "root";
-		String pass = "dave2302387";
-		try{
+		try
+		{
 		Connection con = DriverManager.getConnection(url, user, pass);
+		
 		System.out.println("success");
-		String query = "SELECT * FROM city WHERE Population >= 5000000";
+		
+		String select_query = "SELECT * FROM city WHERE Population > 9000000";
 		Statement stmt = con.createStatement(); 
-		ResultSet rs = stmt.executeQuery(query);
+		//stmt.executeUpdate(insert_query);
+		ResultSet rs = stmt.executeQuery(select_query);
+		City MyCity = new City();
+		MyCity.setPopulation(3000000);
 		while (rs.next())
 		{
 			System.out.println(rs.getString("Name"));
