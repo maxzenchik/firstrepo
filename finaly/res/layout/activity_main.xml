@@ -2,37 +2,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
 
+           <ListView
+               android:id="@+id/listView1"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" >
+           </ListView>
     <EditText
         android:id="@+id/edit_message"
-        android:layout_width="110dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/edit_message" >
 
-        <requestFocus />
+
     </EditText>
-
-    <GridLayout
-        android:layout_width="213dp"
-        android:layout_height="325dp"
-        android:layout_weight="0.25"
-        android:columnCount="1" >
-    </GridLayout>
-
+  
     <Button
         android:id="@+id/button1"
-        android:layout_width="146dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="FindCountry"
         android:text="@string/find_country" />
 
            <Button
-               android:layout_width="wrap_content"
+               android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:longClickable="true"
                android:onClick="sendMessage"
                android:text="@string/button_send" />
-           
+
+     
     </LinearLayout>
