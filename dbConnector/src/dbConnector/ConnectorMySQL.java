@@ -25,7 +25,7 @@ public class ConnectorMySQL {
 		//stmt.executeUpdate(insert_query);
 		ResultSet rs = stmt.executeQuery(select_query);
 		City MyCity = new City();
-		MyCity.setPopulation(3000000);
+		MyCity.setPopulation(2000000);
 		while (rs.next())
 		{
 			System.out.println(rs.getString("Name"));
